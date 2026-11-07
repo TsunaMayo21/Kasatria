@@ -62,6 +62,12 @@ function init3DApp(data) {
             </div>
         `;
 
+        // 🖱️ Add Click Interaction
+        element.addEventListener('click', (event) => {
+            event.stopPropagation();
+            showTileDetails(item, objectCSS);
+        });
+
         const objectCSS = new THREE.CSS3DObject(element);
         objectCSS.position.x = Math.random() * 4000 - 2000;
         objectCSS.position.y = Math.random() * 4000 - 2000;
@@ -170,3 +176,35 @@ function animate() {
     TWEEN.update();
     renderer.render(scene, camera);
 }
+
+// --- Modal & Focus Interaction ---
+function showTileDetails(item, objectCSS) {
+    // Populate modal data
+    document.getElementById('modal-photo').src = item.Photo;
+    document.getElementById('modal-name').textContent = item.Name;
+    
+    const netWorthKey = Object.keys(item).find(k => k.trim() === 'Net Worth') || 'Net Worth';
+    document.getElementById('modal-details').innerHTML = `
+        <strong>Country:</strong> ${item.Country}<br>
+        <strong>Age:</strong> ${item.Age}<br>
+        <strong>Interest:</strong> ${item.Interest}<br>
+        <strong>Net Worth:</strong> ${item[netWorthKey]}
+    `;
+
+    document.getElementById('detail-modal').style.display = 'flex';
+
+    // Smoothly focus camera/tween toward the clicked object
+    new TWEEN.Tween(camera.position)
+        .to({
+            x: objectCSS.position.x,
+            y: objectCSS.position.y,
+            z: objectCSS.position.z + 400
+        }, 1500)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
+}
+
+// Close Modal Event Listener
+document.getElementById('modal-close').addEventListener('click', () => {
+    document.getElementById('detail-modal').style.display = 'none';
+});
