@@ -1,4 +1,4 @@
-let camera, scene, renderer;
+let camera, scene, renderer, controls;
 let objects = [];
 let targets = { table: [], sphere: [], helix: [], grid: [] };
 
@@ -9,15 +9,20 @@ function handleCredentialResponse(response) {
 }
 
 function loadSheetDataAndInit() {
-    // Replace with your Google Sheet published CSV URL
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/1cFukEBtRAzL7DDqQcTzymqoWwdzjH206m_36lK6-eJ0/gviz/tq?tqx=out:csv';
+    // ⚠️ REPLACE WITH YOUR ACTUAL GOOGLE SHEET ID
+    const SHEET_ID = '1cFukEBtRAzL7DDqQcTzymqoWwdzjH206m_36lK6-eJ0';
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv`;
 
     Papa.parse(csvUrl, {
         download: true,
         header: true,
         complete: function(results) {
+            console.log("Parsed CSV Rows:", results.data);
             const rawData = results.data.filter(row => row.Name && row.Name.trim() !== '');
             init3DApp(rawData);
+        },
+        error: function(err) {
+            console.error("CSV Fetch Error:", err);
         }
     });
 }
@@ -31,10 +36,11 @@ function init3DApp(data) {
     // --- Build 3D Elements ---
     for (let i = 0; i < data.length; i++) {
         const item = data[i];
-        const netWorthStr = item[' Net Worth '] || item['Net Worth'] || '$0';
+        const netWorthKey = Object.keys(item).find(k => k.trim() === 'Net Worth') || 'Net Worth';
+        const netWorthStr = item[netWorthKey] || '$0';
         const cleanNetWorth = parseFloat(netWorthStr.replace(/[\$,]/g, '')) || 0;
 
-        // Determine background color based on Net Worth (Step 6)
+        // Color coding (Red < $100K, Orange > $100K, Green > $200K)
         let colorClass = 'bg-red';
         if (cleanNetWorth > 200000) {
             colorClass = 'bg-green';
@@ -68,7 +74,7 @@ function init3DApp(data) {
     for (let i = 0; i < objects.length; i++) {
         const object = new THREE.Object3D();
         object.position.x = ((i % 20) * 140) - 1330;
-        object.position.y = (-(Math.floor(i / 20)) * 180) + 900;
+        object.position.y = (-(Math.floor(i / 20)) * 180) + 800;
         object.position.z = 0;
         targets.table.push(object);
     }
@@ -87,7 +93,7 @@ function init3DApp(data) {
 
     // --- 3. DOUBLE HELIX LAYOUT ---
     for (let i = 0; i < objects.length; i++) {
-        const strand = i % 2; // Alternate between 2 strands
+        const strand = i % 2;
         const theta = (i * 0.175) + (strand * Math.PI);
         const y = -(i * 7) + 600;
         const object = new THREE.Object3D();
@@ -106,9 +112,9 @@ function init3DApp(data) {
         const y = Math.floor(i / 5) % 4;
         const z = Math.floor(i / 20);
 
-        object.position.x = (x * 350) - 700;
-        object.position.y = -(y * 300) + 450;
-        object.position.z = (z * 350) - 1600;
+        object.position.x = (x * 300) - 600;
+        object.position.y = -(y * 250) + 375;
+        object.position.z = (z * 300) - 1350;
         targets.grid.push(object);
     }
 
@@ -119,7 +125,7 @@ function init3DApp(data) {
 
     transform(targets.table, 2000);
 
-    // Button Event Listeners
+    // Event Listeners
     document.getElementById('table').addEventListener('click', () => transform(targets.table, 2000));
     document.getElementById('sphere').addEventListener('click', () => transform(targets.sphere, 2000));
     document.getElementById('helix').addEventListener('click', () => transform(targets.helix, 2000));
@@ -156,6 +162,7 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.render(scene, camera);
 }
 
 function animate() {
