@@ -10,7 +10,7 @@ function handleCredentialResponse(response) {
 
 function loadSheetDataAndInit() {
     // Replace with your Google Sheet published CSV URL
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/1cFukEBtRAzL7DDqQcTzymqoWwdzjH206m_36lK6-eJ0/edit?usp=sharing';
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/1cFukEBtRAzL7DDqQcTzymqoWwdzjH206m_36lK6-eJ0';
 
     Papa.parse(csvUrl, {
         download: true,
