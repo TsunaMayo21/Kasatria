@@ -253,8 +253,5 @@ function resetCameraView() {
     if (controls) {
         controls.target.set(0, 0, 0);
         camera.up.set(0, 1, 0); // Ensure "up" orientation is straight
-    }
-
-    // 4. Optionally, trigger a smooth transition back to the default table layout view
-    transform(targets.table, 1500);
+    };
 }
