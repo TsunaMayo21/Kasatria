@@ -131,8 +131,9 @@ function init3DApp(data) {
 
     transform(targets.table, 2000);
 
+    // --- Updated Trackball Controls Binding ---
     if (typeof THREE.TrackballControls === 'function') {
-        controls = new THREE.TrackballControls(camera, renderer.domElement);
+        controls = new THREE.TrackballControls(camera, window); // Bind to window so dragging anywhere works!
         controls.rotateSpeed = 1.0;
         controls.zoomSpeed = 1.2;
         controls.panSpeed = 0.8;
