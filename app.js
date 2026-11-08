@@ -215,3 +215,9 @@ document.getElementById('modal-close').addEventListener('click', () => {
         .easing(TWEEN.Easing.Exponential.InOut)
         .start();
 });
+
+document.getElementById('detail-modal').addEventListener('click', (e) => {
+    if (e.target.id === 'detail-modal') {
+        document.getElementById('modal-close').click();
+    }
+});
