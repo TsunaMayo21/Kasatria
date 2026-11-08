@@ -235,16 +235,26 @@ document.getElementById('detail-modal').addEventListener('click', (e) => {
     }
 });
 
-// --- Reset Camera Position & Orbit Controls Target ---
+// --- Reset Camera Position, Rotation & Controls ---
 function resetCameraView() {
-    // Smoothly animate camera back to home position
+    // 1. Smoothly animate camera position back to front-facing center
     new TWEEN.Tween(camera.position)
         .to({ x: 0, y: 0, z: 3000 }, 1500)
         .easing(TWEEN.Easing.Exponential.InOut)
         .start();
 
-    // Reset TrackballControls target back to center (0,0,0)
+    // 2. Reset camera rotation so it's not tilted
+    new TWEEN.Tween(camera.rotation)
+        .to({ x: 0, y: 0, z: 0 }, 1500)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
+
+    // 3. Reset TrackballControls targets and up vector
     if (controls) {
         controls.target.set(0, 0, 0);
+        camera.up.set(0, 1, 0); // Ensure "up" orientation is straight
     }
+
+    // 4. Optionally, trigger a smooth transition back to the default table layout view
+    transform(targets.table, 1500);
 }
