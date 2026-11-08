@@ -148,7 +148,7 @@ function init3DApp(data) {
     document.getElementById('sphere').addEventListener('click', () => transform(targets.sphere, 2000));
     document.getElementById('helix').addEventListener('click', () => transform(targets.helix, 2000));
     document.getElementById('grid').addEventListener('click', () => transform(targets.grid, 2000));
-
+    document.getElementById('reset-cam').addEventListener('click', resetCameraView);
     window.addEventListener('resize', onWindowResize);
     animate();
 }
@@ -235,3 +235,16 @@ document.getElementById('detail-modal').addEventListener('click', (e) => {
     }
 });
 
+// --- Reset Camera Position & Orbit Controls Target ---
+function resetCameraView() {
+    // Smoothly animate camera back to home position
+    new TWEEN.Tween(camera.position)
+        .to({ x: 0, y: 0, z: 3000 }, 1500)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
+
+    // Reset TrackballControls target back to center (0,0,0)
+    if (controls) {
+        controls.target.set(0, 0, 0);
+    }
+}
