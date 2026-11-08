@@ -26,7 +26,13 @@ body {
 .login-card p { color: #aaa; font-size: 14px; margin-bottom: 30px; }
 
 /* Three.js App UI */
-#app-container { display: none; width: 100vw; height: 100vh; position: relative; }
+#app-container {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
 #menu {
     position: absolute;
     bottom: 20px;

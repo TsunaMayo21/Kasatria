@@ -131,9 +131,9 @@ function init3DApp(data) {
 
     transform(targets.table, 2000);
 
-    // --- Updated Trackball Controls Binding ---
+// --- Full-Screen Interactive Trackball Controls ---
     if (typeof THREE.TrackballControls === 'function') {
-        controls = new THREE.TrackballControls(camera, window); // Bind to window so dragging anywhere works!
+        controls = new THREE.TrackballControls(camera, document.getElementById('app-container'));
         controls.rotateSpeed = 1.0;
         controls.zoomSpeed = 1.2;
         controls.panSpeed = 0.8;
@@ -143,7 +143,6 @@ function init3DApp(data) {
     } else {
         console.warn("TrackballControls script not loaded properly.");
     }
-
     // Event Listeners
     document.getElementById('table').addEventListener('click', () => transform(targets.table, 2000));
     document.getElementById('sphere').addEventListener('click', () => transform(targets.sphere, 2000));
