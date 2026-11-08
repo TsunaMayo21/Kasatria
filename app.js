@@ -204,7 +204,14 @@ function showTileDetails(item, objectCSS) {
         .start();
 }
 
-// Close Modal Event Listener
+// --- Updated Close Modal Event Listener ---
 document.getElementById('modal-close').addEventListener('click', () => {
+    // Hide modal
     document.getElementById('detail-modal').style.display = 'none';
+
+    // Smoothly zoom camera back out to the default view
+    new TWEEN.Tween(camera.position)
+        .to({ x: 0, y: 0, z: 3000 }, 1500)
+        .easing(TWEEN.Easing.Exponential.InOut)
+        .start();
 });
