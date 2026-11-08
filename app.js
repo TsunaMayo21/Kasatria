@@ -168,13 +168,13 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.render(scene, camera);
+    controls.handleResize(); // Update trackball controls on resize
 }
 
 function animate() {
     requestAnimationFrame(animate);
     TWEEN.update();
-    renderer.render(scene, camera);
+    controls.update(); // Keep controls active
 }
 
 // --- Modal & Focus Interaction ---
@@ -221,3 +221,14 @@ document.getElementById('detail-modal').addEventListener('click', (e) => {
         document.getElementById('modal-close').click();
     }
 });
+
+// --- Render Setup ---
+    renderer = new THREE.CSS3DRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.getElementById('app-container').appendChild(renderer.domElement);
+
+    // --- Add TrackballControls for Orbit & Zoom ---
+    controls = new THREE.TrackballControls(camera, renderer.domElement);
+    controls.minDistance = 500;
+    controls.maxDistance = 6000;
+    controls.addEventListener('change', () => renderer.render(scene, camera));
