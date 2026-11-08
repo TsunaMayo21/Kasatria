@@ -130,7 +130,7 @@ function init3DApp(data) {
     document.getElementById('app-container').appendChild(renderer.domElement);
 
     transform(targets.table, 2000);
-    
+
     if (typeof THREE.TrackballControls === 'function') {
         controls = new THREE.TrackballControls(camera, renderer.domElement);
         controls.rotateSpeed = 1.0;
@@ -142,12 +142,6 @@ function init3DApp(data) {
     } else {
         console.warn("TrackballControls script not loaded properly.");
     }
-
-    // --- Add TrackballControls for Orbit & Zoom ---
-    controls = new THREE.TrackballControls(camera, renderer.domElement);
-    controls.minDistance = 500;
-    controls.maxDistance = 6000;
-    controls.addEventListener('change', () => renderer.render(scene, camera));
 
     // Event Listeners
     document.getElementById('table').addEventListener('click', () => transform(targets.table, 2000));
