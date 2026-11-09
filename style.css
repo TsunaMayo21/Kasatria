@@ -33,10 +33,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-#app-container > div:first-child{
-    pointer-events: auto;
-}
-
 #menu {
     position: absolute;
     bottom: 20px;
@@ -54,7 +50,6 @@ button {
     margin: 0 5px;
     border-radius: 4px;
     font-weight: bold;
-    touch-action: manipulation;
 }
 button:hover { background-color: rgba(0,255,255,0.5); color: #fff; }
 button:active { background-color: rgba(0,255,255,0.75); }
