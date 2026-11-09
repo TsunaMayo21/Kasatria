@@ -24,35 +24,59 @@ body {
 }
 .login-card h2 { margin-bottom: 10px; font-weight: 500; }
 .login-card p { color: #aaa; font-size: 14px; margin-bottom: 30px; }
-
 /* Three.js App UI */
 #app-container {
     display: none;
     width: 100vw;
     height: 100vh;
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     overflow: hidden;
 }
+
+/* Allow touch and mouse events to pass through the CSS3D renderer background */
+#app-container > div {
+    pointer-events: none;
+}
+
+/* Re-enable touch/click events on individual profile cards */
+.element-card {
+    pointer-events: auto !important;
+    touch-action: manipulation;
+}
+
 #menu {
-    position: absolute;
+    position: fixed;
     bottom: 20px;
+    left: 0;
     width: 100%;
     text-align: center;
-    z-index: 20;
+    z-index: 99999;
+    pointer-events: auto;
 }
+
 button {
     color: rgba(255,255,255,0.75);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
     outline: 1px solid rgba(255,255,255,0.75);
     border: 0px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     cursor: pointer;
-    margin: 0 5px;
+    margin: 0 4px;
     border-radius: 4px;
     font-weight: bold;
+    touch-action: manipulation;
 }
-button:hover { background-color: rgba(0,255,255,0.5); color: #fff; }
-button:active { background-color: rgba(0,255,255,0.75); }
+
+button:hover { 
+    background-color: rgba(0,255,255,0.5); 
+    color: #fff; 
+}
+
+button:active { 
+    background-color: rgba(0,255,255,0.75); 
+}
 
 /* 3D Element Card Styles (Image B layout) */
 .element-card {
