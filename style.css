@@ -38,14 +38,14 @@ body {
     bottom: 20px;
     width: 100%;
     text-align: center;
-    z-index: 5;
+    z-index: 20;
 }
 button {
     color: rgba(255,255,255,0.75);
-    background: transparent;
+    background: rgba(0, 0, 0, 0.5);
     outline: 1px solid rgba(255,255,255,0.75);
     border: 0px;
-    padding: 8px 16px;
+    padding: 8px 12px;
     cursor: pointer;
     margin: 0 5px;
     border-radius: 4px;
