@@ -131,24 +131,25 @@ function init3DApp(data) {
 
     transform(targets.table, 2000);
 
-// --- Full-Screen Interactive Trackball Controls ---
+    // --- Touch & Mobile-Safe Trackball Controls ---
     if (typeof THREE.TrackballControls === 'function') {
-        controls = new THREE.TrackballControls(camera, document.getElementById('app-container'));
+        controls = new THREE.TrackballControls(camera, renderer.domElement);
         controls.rotateSpeed = 1.0;
         controls.zoomSpeed = 1.2;
         controls.panSpeed = 0.8;
         controls.minDistance = 500;
         controls.maxDistance = 6000;
-        controls.addEventListener('change', () => renderer.render(scene, camera));
     } else {
         console.warn("TrackballControls script not loaded properly.");
     }
-    // Event Listeners
+
+    // Event Listeners for Buttons
     document.getElementById('table').addEventListener('click', () => transform(targets.table, 2000));
     document.getElementById('sphere').addEventListener('click', () => transform(targets.sphere, 2000));
     document.getElementById('helix').addEventListener('click', () => transform(targets.helix, 2000));
     document.getElementById('grid').addEventListener('click', () => transform(targets.grid, 2000));
     document.getElementById('reset-cam').addEventListener('click', resetCameraView);
+
     window.addEventListener('resize', onWindowResize);
     animate();
 }
@@ -180,7 +181,7 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    controls.handleResize(); // Update trackball controls on resize
+    if (controls) controls.handleResize();
 }
 
 function animate() {
@@ -192,7 +193,6 @@ function animate() {
 
 // --- Modal & Focus Interaction ---
 function showTileDetails(item, objectCSS) {
-    // Populate modal data
     document.getElementById('modal-photo').src = item.Photo;
     document.getElementById('modal-name').textContent = item.Name;
     
@@ -206,7 +206,6 @@ function showTileDetails(item, objectCSS) {
 
     document.getElementById('detail-modal').style.display = 'flex';
 
-    // Smoothly focus camera/tween toward the clicked object
     new TWEEN.Tween(camera.position)
         .to({
             x: objectCSS.position.x,
@@ -217,12 +216,10 @@ function showTileDetails(item, objectCSS) {
         .start();
 }
 
-// --- Updated Close Modal Event Listener ---
+// --- Close Modal Event Listener ---
 document.getElementById('modal-close').addEventListener('click', () => {
-    // Hide modal
     document.getElementById('detail-modal').style.display = 'none';
 
-    // Smoothly zoom camera back out to the default view
     new TWEEN.Tween(camera.position)
         .to({ x: 0, y: 0, z: 3000 }, 1500)
         .easing(TWEEN.Easing.Exponential.InOut)
@@ -237,21 +234,18 @@ document.getElementById('detail-modal').addEventListener('click', (e) => {
 
 // --- Reset Camera Position, Rotation & Controls ---
 function resetCameraView() {
-    // 1. Smoothly animate camera position back to front-facing center
     new TWEEN.Tween(camera.position)
         .to({ x: 0, y: 0, z: 3000 }, 1500)
         .easing(TWEEN.Easing.Exponential.InOut)
         .start();
 
-    // 2. Reset camera rotation so it's not tilted
     new TWEEN.Tween(camera.rotation)
         .to({ x: 0, y: 0, z: 0 }, 1500)
         .easing(TWEEN.Easing.Exponential.InOut)
         .start();
 
-    // 3. Reset TrackballControls targets and up vector
     if (controls) {
         controls.target.set(0, 0, 0);
-        camera.up.set(0, 1, 0); // Ensure "up" orientation is straight
-    };
+        camera.up.set(0, 1, 0);
+    }
 }
