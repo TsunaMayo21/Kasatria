@@ -33,11 +33,12 @@ body {
     top: 0;
     left: 0;
     overflow: hidden;
+    pointer-events: none;
 }
 
 /* Allow touch and mouse events to pass through the CSS3D renderer background */
 #app-container > div {
-    pointer-events: none;
+    pointer-events: auto;
 }
 
 /* Re-enable touch/click events on individual profile cards */
@@ -67,6 +68,7 @@ button {
     border-radius: 4px;
     font-weight: bold;
     touch-action: manipulation;
+    pointer-events: auto;
 }
 
 button:hover { 
