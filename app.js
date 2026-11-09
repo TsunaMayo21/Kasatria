@@ -159,13 +159,20 @@ function init3DApp(data) {
         console.warn("TrackballControls script not loaded properly.");
     }
     // Event Listeners
-    bindTouchAndClick('table', () => transform(targets.table, 2000));
-    bindTouchAndClick('sphere', () => transform(targets.sphere, 2000));
-    bindTouchAndClick('helix', () => transform(targets.helix, 2000));
-    bindTouchAndClick('grid', () => transform(targets.grid, 2000));
-    if (document.getElementById('reset-cam')) {
-        bindTouchAndClick('reset-cam', resetCameraView);
+// Simplify back to standard click listener with guaranteed z-index handling
+['table', 'sphere', 'helix', 'grid', 'reset-cam'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.style.zIndex = "10000"; // Ensure buttons sit high above everything
+        el.addEventListener('click', () => {
+            if (id === 'table') transform(targets.table, 2000);
+            if (id === 'sphere') transform(targets.sphere, 2000);
+            if (id === 'helix') transform(targets.helix, 2000);
+            if (id === 'grid') transform(targets.grid, 2000);
+            if (id === 'reset-cam') resetCameraView();
+        });
     }
+});
     //   document.getElementById('reset-cam').addEventListener('click', resetCameraView);
     //   window.addEventListener('resize', onWindowResize);
     //   animate();
