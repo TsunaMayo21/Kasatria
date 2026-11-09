@@ -27,6 +27,21 @@ function loadSheetDataAndInit() {
     });
 }
 
+// --- Mobile-Friendly Button Helper ---
+function bindTouchAndClick(elementId, actionFn) {
+    const btn = document.getElementById(elementId);
+    if (!btn) return;
+    
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        actionFn();
+    });
+    btn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        actionFn();
+    }, { passive: false });
+}
+
 function init3DApp(data) {
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
     camera.position.z = 3000;
@@ -144,13 +159,16 @@ function init3DApp(data) {
         console.warn("TrackballControls script not loaded properly.");
     }
     // Event Listeners
-    document.getElementById('table').addEventListener('click', () => transform(targets.table, 2000));
-    document.getElementById('sphere').addEventListener('click', () => transform(targets.sphere, 2000));
-    document.getElementById('helix').addEventListener('click', () => transform(targets.helix, 2000));
-    document.getElementById('grid').addEventListener('click', () => transform(targets.grid, 2000));
-    document.getElementById('reset-cam').addEventListener('click', resetCameraView);
-    window.addEventListener('resize', onWindowResize);
-    animate();
+    bindTouchAndClick('table', () => transform(targets.table, 2000));
+    bindTouchAndClick('sphere', () => transform(targets.sphere, 2000));
+    bindTouchAndClick('helix', () => transform(targets.helix, 2000));
+    bindTouchAndClick('grid', () => transform(targets.grid, 2000));
+    if (document.getElementById('reset-cam')) {
+        bindTouchAndClick('reset-cam', resetCameraView);
+    }
+    //   document.getElementById('reset-cam').addEventListener('click', resetCameraView);
+    //   window.addEventListener('resize', onWindowResize);
+    //   animate();
 }
 
 function transform(target, duration) {
